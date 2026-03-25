@@ -2,11 +2,14 @@ import base64
 import json
 import logging
 import random
+import os
 import boto3
 from botocore.exceptions import ClientError
 from langchain_core.tools import tool
 
 logger = logging.getLogger(__name__)
+
+LOGOS_DIR = "generated_logos"
 
 
 class ImageError(Exception):
@@ -52,12 +55,19 @@ def generate_logo(business_name: str) -> str:
         },
     })
     try:
+        # Ensure logos directory exists
+        if not os.path.exists(LOGOS_DIR):
+            os.makedirs(LOGOS_DIR)
+
         image_bytes = _generate_image(body)
-        output_path = "logo.png"
+        filename = f"{business_name.replace(' ', '_')}_logo.png"
+        output_path = os.path.join(LOGOS_DIR, filename)
+        
         with open(output_path, "wb") as f:
             f.write(image_bytes)
+        
         logger.info("Successfully generated logo for %s", business_name)
-        return f"Logo generated successfully for {business_name}! The logo is saved to {output_path}."
+        return f"Logo generated successfully for {business_name}! The logo is saved as {output_path}."
     except (ClientError, ImageError) as e:
         msg = e.message if isinstance(e, ImageError) else e.response["Error"]["Message"]
         logger.error("Error generating logo: %s", msg)

@@ -1,32 +1,33 @@
-# Marketing Agency AI Assistant
+# 🚀 Brand Boost AI: Your Personal Marketing Agency
 
-A sophisticated multi-agent AI system powered by AWS Bedrock and LangGraph that provides comprehensive marketing automation and strategy services.
+A sophisticated multi-agent AI system powered by **AWS Bedrock** and **LangGraph** that provides comprehensive marketing automation, branding, and strategy services.
 
 ## 🎯 Overview
 
-This project implements an intelligent marketing agency using multiple specialized AI agents. Each agent is designed to handle specific marketing tasks, from strategy development to content creation, leveraging AWS Bedrock's Anthropic models for high-quality AI responses.
+BrandBoost AI is an intelligent marketing agency orchestrated by multiple specialized AI agents. From developing comprehensive marketing strategies to generating professional logos and catchy taglines, the system leverages AWS Bedrock's Anthropic Claude 3.5 Sonnet models to deliver expert-level marketing collateral.
 
 ## ✨ Features
 
-- **Multi-Agent Architecture**: Specialized agents for different marketing functions
-- **Real-time Streaming**: Stream responses in real-time via Streamlit UI or CLI
-- **AWS Bedrock Integration**: Powered by Claude models for superior AI capabilities
-- **Conversation Memory**: Maintains conversation history for context-aware responses
-- **Tool-Based System**: Agents equipped with specialized tools for specific marketing tasks
-- **Flexible UI**: Both web-based (Streamlit) and command-line interfaces
+- **Premium UI/UX**: Professional Streamlit interface with a modern look and feel.
+- **Multi-Agent Intelligence**: Specialized agents for strategy, SEO, ads, social media, and more.
+- **Visual Branding**: Integrated **Amazon Titan Image Generator** for professional logo creation.
+- **Organized Storage**: All generated logos are automatically sanitized and stored in a dedicated `generated_logos/` directory.
+- **Real-time Streaming**: Instant feedback with token-level streaming and tool execution status boxes.
+- **Interactive Campaign Management**: Sidebar controls to reset campaigns and view quick suggestions.
+- **One-Click Downloads**: Direct download buttons for generated visual assets.
 
 ## 🏗️ Architecture
 
-The system uses **LangGraph** to orchestrate an agentic workflow:
+The system uses **LangGraph** to manage a dynamic, stateful workflow:
 
 ```
-User Input → Agent Node → Tool Evaluation → Tool Execution → Response
-                ↑_____________↓________________↓______________|
+User Input → BrandBoost Agent → Tool Evaluation → Tool Execution → Response
+                  ↑_________________↓___________________↓__________________|
 ```
 
-- **Agent Node**: Main reasoning loop using Claude Sonnet 4.6
-- **Tool Node**: Executes specialized marketing tools
-- **Conditional Routing**: Dynamically decides whether to call tools or respond directly
+- **Reasoning Engine**: Claude 3.5 Sonnet (Advanced Reasoning)
+- **Tool Executor**: Claude 3 Haiku (Fast & Efficient)
+- **Image Engine**: Amazon Titan Image Generator V2
 
 ## 🤖 Available Agents
 
@@ -101,66 +102,45 @@ The system includes the following specialized agents:
 
 ### Web Interface (Streamlit)
 
-Run the interactive web-based interface:
+Launch the modern branding dashboard:
 
 ```bash
 streamlit run app.py
 ```
 
-The application will open in your browser at `http://localhost:8501`
-
 **Features:**
-- Chat interface with streaming responses
-- Logo image display support
-- Conversation history
-- Real-time token streaming
+- **Status Indicators**: Real-time `st.status` boxes showing agent activity.
+- **Logo Gallery**: Expandable visual branding sections with path confirmation.
+- **Asset Download**: One-click download buttons for generated PNGs.
+- **Campaign Reset**: Quick-start button in the sidebar to begin fresh.
 
 ### Command Line Interface (CLI)
 
-Run the CLI version for terminal-based interaction:
+For lightweight text-based interaction:
 
 ```bash
 python cli.py
-```
-
-**Features:**
-- Simple text-based interaction
-- Type 'quit' or 'exit' to end the session
-- Conversation history maintained during session
-
-**Example:**
-```
-You: Create a marketing strategy for a fitness app startup
-Agent: [Comprehensive strategy response...]
-
-You: What would be a good tagline?
-Agent: [Tagline suggestions...]
 ```
 
 ## 📦 Project Structure
 
 ```
 Marketing Agent/
-├── app.py                 # Streamlit web interface
-├── cli.py                 # Command-line interface
-├── requirements.txt       # Python dependencies
+├── app.py                 # Premium Streamlit UI
+├── cli.py                 # Terminal-based interface
+├── requirements.txt       # Core dependencies
+├── generated_logos/       # Auto-created repository for visual assets
 │
-├── agents/                # Specialized marketing agents
-│   ├── __init__.py       # Agent exports
-│   ├── strategy_agent.py
-│   ├── ad_copy_agent.py
-│   ├── email_campaign_agent.py
-│   ├── social_media_agent.py
-│   ├── seo_agent.py
-│   ├── logo_agent.py
-│   ├── tag_line_agent.py
-│   └── domain_agent.py
+├── agents/                # Intelligent Agent Definitions
+│   ├── strategy_agent.py  # Marketing planning
+│   ├── logo_agent.py      # Titan Image integration
+│   ├── seo_agent.py       # SEO & Keyword research
+│   └── ...                # Other specialized agents
 │
-└── graph/                 # LangGraph workflow
-    ├── __init__.py
-    ├── graph.py          # Main agent graph definition
-    ├── prompt.py         # System prompts
-    └── state.py          # State management
+└── graph/                 # LangGraph Workflow Orchestration
+    ├── graph.py          # State machine definition
+    ├── prompt.py         # Advanced system instructions
+    └── state.py          # Session state management
 ```
 
 ## 🔧 Configuration
@@ -173,8 +153,8 @@ Marketing Agent/
 
 ### Models Used
 
-- **Agent Reasoning**: `claude-sonnet-4-6` (advanced reasoning)
-- **Tool Execution**: `claude-haiku-4-5-20251001-v1:0` (fast, efficient)
+- **Primary Model**: `Claude 3.5 Sonnet` (Advanced reasoning & orchestration)
+- **Image Generation**: `Amazon Titan Image Generator V2`
 
 ## 🎨 Example Workflows
 
