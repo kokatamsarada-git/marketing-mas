@@ -2,18 +2,16 @@ import base64
 import json
 import logging
 import random
-import os
 import boto3
 from botocore.exceptions import ClientError
 from langchain_core.tools import tool
+from supabase_utils import get_supabase_client, upload_logo
 
 logger = logging.getLogger(__name__)
 
-LOGOS_DIR = "generated_logos"
-
 
 class ImageError(Exception):
-    """Custom exception for errors returned by Amazon Titan Image Generator V2."""
+    # ...existing code...
     def __init__(self, message):
         self.message = message
 
@@ -35,7 +33,7 @@ def _generate_image(body: str) -> bytes:
 
 
 @tool
-def generate_logo(business_name: str) -> str:
+def generate_logo(business_name: str, user_id: str = "anonymous") -> str:
     """Generate a professional logo for a business using Amazon Titan Image Generator.
     Use this tool when the user asks for logo creation, visual branding,
     brand identity design, or any image/logo generation for their business."""
@@ -55,19 +53,15 @@ def generate_logo(business_name: str) -> str:
         },
     })
     try:
-        # Ensure logos directory exists
-        if not os.path.exists(LOGOS_DIR):
-            os.makedirs(LOGOS_DIR)
-
         image_bytes = _generate_image(body)
-        filename = f"{business_name.replace(' ', '_')}_logo.png"
-        output_path = os.path.join(LOGOS_DIR, filename)
         
-        with open(output_path, "wb") as f:
-            f.write(image_bytes)
+        # Use admin=True if SUPABASE_SERVICE_KEY is configured to bypass RLS for system assets
+        supabase = get_supabase_client(admin=True)
         
-        logger.info("Successfully generated logo for %s", business_name)
-        return f"Logo generated successfully for {business_name}! The logo is saved as {output_path}."
+        public_url = upload_logo(supabase, user_id, business_name, image_bytes)
+        
+        logger.info("Successfully generated logo for %s and uploaded to Supabase Storage", business_name)
+        return f"Logo generated successfully for {business_name}! The logo is available at: {public_url}"
     except (ClientError, ImageError) as e:
         msg = e.message if isinstance(e, ImageError) else e.response["Error"]["Message"]
         logger.error("Error generating logo: %s", msg)

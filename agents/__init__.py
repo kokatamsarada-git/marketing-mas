@@ -6,6 +6,7 @@ from agents.social_media_agent import create_social_media_content
 from agents.email_campaign_agent import create_email_campaign
 from agents.tag_line_agent import generate_taglines
 from agents.ad_copy_agent import create_ad_copy
+from agents.competitor_agent import analyze_competitor
 
 tools = [
     create_marketing_strategy
@@ -16,5 +17,5 @@ tools = [
     , create_email_campaign
     , generate_taglines
     , create_ad_copy
-    
+    , analyze_competitor
     ]

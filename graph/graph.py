@@ -7,13 +7,16 @@ from langgraph.graph import StateGraph , START
 from langgraph.prebuilt import ToolNode, tools_condition
 
 _llm = ChatBedrock(model="global.anthropic.claude-sonnet-4-6", streaming=True)
-_llm_with_tools = _llm.bind_tools(all_tools)
 
 async def agent_node(state: AgentState)-> dict:
     """
     Node function for the agent. It takes the conversation history and other relevant information
       from the state, and returns the next message to be sent to the user."""
-    messages= [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
+    # Tell the agent its user_id if needed, though we'll inject it into tools
+    system_prompt = SYSTEM_PROMPT + f"\n\nContext: Current User ID is {state.get('user_id', 'anonymous')}."
+    messages= [SystemMessage(content=system_prompt)] + state["messages"]
+    
+    _llm_with_tools = _llm.bind_tools(all_tools)
     response = await _llm_with_tools.ainvoke(messages)
     return {"messages": [response]}
 

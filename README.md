@@ -8,48 +8,27 @@ BrandBoost AI is an intelligent marketing agency orchestrated by multiple specia
 
 ## ✨ Features
 
-- **Premium UI/UX**: Professional Streamlit interface with a modern look and feel.
-- **Multi-Agent Intelligence**: Specialized agents for strategy, SEO, ads, social media, and more.
-- **Visual Branding**: Integrated **Amazon Titan Image Generator** for professional logo creation.
-- **Organized Storage**: All generated logos are automatically sanitized and stored in a dedicated `generated_logos/` directory.
-- **Real-time Streaming**: Instant feedback with token-level streaming and tool execution status boxes.
-- **Interactive Campaign Management**: Sidebar controls to reset campaigns and view quick suggestions.
-- **One-Click Downloads**: Direct download buttons for generated visual assets.
+- **Multi-User SaaS Architecture**: Secure user authentication and session isolation via **Supabase Auth**.
+- **Conversation Persistence**: Complete chat history stored in **Supabase Database**, allowing users to resume previous campaigns across devices.
+- **Cloud Asset Storage**: Generated logos are uploaded to **Supabase Storage** and linked to user profiles for permanent access.
+- **Competitor Intelligence**: New agent for deep-dive competitor analysis from any URL.
+- **Premium Multi-Page UI**: Dedicated Home, Auth, and Chatbot pages with a modern, responsive design and persistence sidebar.
 
 ## 🏗️ Architecture
 
-The system uses **LangGraph** to manage a dynamic, stateful workflow:
+The system uses **LangGraph** for workflow orchestration and **Supabase** for the backend:
 
-```
-User Input → BrandBoost Agent → Tool Evaluation → Tool Execution → Response
-                  ↑_________________↓___________________↓__________________|
-```
-
-- **Reasoning Engine**: Claude 3.5 Sonnet (Advanced Reasoning)
-- **Tool Executor**: Claude 3 Haiku (Fast & Efficient)
+- **Frontend**: Streamlit (Multipage)
+- **Backend**: Supabase (Auth, Database, Storage)
+- **AI Engine**: AWS Bedrock (Claude 3.5 Sonnet, Claude 3 Haiku)
 - **Image Engine**: Amazon Titan Image Generator V2
-
-## 🤖 Available Agents
-
-The system includes the following specialized agents:
-
-| Agent | Purpose |
-|-------|---------|
-| **Strategy Agent** | Create comprehensive marketing strategies |
-| **Ad Copy Agent** | Generate compelling advertisement copy |
-| **Email Campaign Agent** | Design email marketing campaigns |
-| **Social Media Agent** | Create social media content and strategies |
-| **SEO Agent** | Develop SEO strategies and keyword optimization |
-| **Logo Agent** | Generate logo design concepts and briefs |
-| **Tag Line Agent** | Create catchy business taglines |
-| **Domain Agent** | Handle domain-related recommendations |
 
 ## 📋 Prerequisites
 
 - Python 3.8+
 - AWS Account with Bedrock access
+- Supabase Project (URL and API Key)
 - AWS credentials configured
-- Internet connection
 
 ## 🚀 Getting Started
 
@@ -60,42 +39,30 @@ The system includes the following specialized agents:
    cd "Marketing Agent"
    ```
 
-2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Activate the virtual environment**
-   - **Windows PowerShell**:
-     ```powershell
-     .\venv\Scripts\Activate.ps1
-     ```
-   - **Windows CMD**:
-     ```cmd
-     venv\Scripts\activate.bat
-     ```
-   - **macOS/Linux**:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Configure AWS Credentials**
+2. **Set up Environment Variables**
    
    Create a `.env` file in the project root:
    ```env
+   # AWS Configuration
    AWS_ACCESS_KEY_ID=your_access_key
    AWS_SECRET_ACCESS_KEY=your_secret_key
    AWS_DEFAULT_REGION=us-east-1
+
+   # Supabase Configuration
+   SUPABASE_URL=https://your-project-id.supabase.co
+   SUPABASE_KEY=your-anon-key
+   SUPABASE_SERVICE_KEY=your-service-role-key
    ```
 
-   Or configure via AWS CLI:
+3. **Initialize Supabase Schema**
+   - Run the SQL commands from `schema.sql` in your Supabase SQL Editor.
+   - Create a storage bucket named `logos` in your Supabase dashboard.
+   - **Important**: Disable "Email Confirmation" in Supabase Auth settings to allow immediate logins.
+
+4. **Install and Run**
    ```bash
-   aws configure
+   pip install -r requirements.txt
+   streamlit run app.py
    ```
 
 ## 💻 Usage
@@ -110,32 +77,25 @@ streamlit run app.py
 
 **Features:**
 - **Status Indicators**: Real-time `st.status` boxes showing agent activity.
-- **Logo Gallery**: Expandable visual branding sections with path confirmation.
-- **Asset Download**: One-click download buttons for generated PNGs.
+- **Logo Gallery**: Cloud-hosted visual branding sections.
+- **Asset Download**: One-click download buttons for generated PNGs from Supabase Storage.
+- **Campaign History**: Persistence sidebar to view previous chat sessions.
 - **Campaign Reset**: Quick-start button in the sidebar to begin fresh.
-
-### Command Line Interface (CLI)
-
-For lightweight text-based interaction:
-
-```bash
-python cli.py
-```
 
 ## 📦 Project Structure
 
 ```
 Marketing Agent/
-├── app.py                 # Premium Streamlit UI
-├── cli.py                 # Terminal-based interface
+├── app.py                 # Premium Multi-page Streamlit UI
+├── supabase_utils.py      # Supabase Auth, DB, and Storage logic
+├── schema.sql             # SQL definitions for conversations & RLS
 ├── requirements.txt       # Core dependencies
-├── generated_logos/       # Auto-created repository for visual assets
 │
 ├── agents/                # Intelligent Agent Definitions
-│   ├── strategy_agent.py  # Marketing planning
-│   ├── logo_agent.py      # Titan Image integration
-│   ├── seo_agent.py       # SEO & Keyword research
-│   └── ...                # Other specialized agents
+│   ├── competitor_agent.py # Competitive analysis agent [NEW]
+│   ├── strategy_agent.py   # Marketing planning
+│   ├── logo_agent.py       # Bedrock Titan integration
+│   └── ...                 # Other specialized agents
 │
 └── graph/                 # LangGraph Workflow Orchestration
     ├── graph.py          # State machine definition
@@ -156,7 +116,17 @@ Marketing Agent/
 - **Primary Model**: `Claude 3.5 Sonnet` (Advanced reasoning & orchestration)
 - **Image Generation**: `Amazon Titan Image Generator V2`
 
-## 🎨 Example Workflows
+| Agent | Purpose |
+|-------|---------|
+| **Competitor Agent** | Analyze rivals and generate deep competitive reports |
+| **Strategy Agent** | Create comprehensive marketing strategies |
+| **Ad Copy Agent** | Generate compelling advertisement copy |
+| **Email Campaign Agent** | Design email marketing campaigns |
+| **Social Media Agent** | Create social media content and strategies |
+| **SEO Agent** | Develop SEO strategies and keyword optimization |
+| **Logo Agent** | Generate logo design concepts and visual branding |
+| **Tag Line Agent** | Create catchy business taglines |
+| **Domain Agent** | Handle domain-related recommendations |
 
 ### Marketing Strategy Creation
 ```
@@ -178,6 +148,8 @@ Agent: [Coordinates multiple agents to deliver comprehensive campaign materials]
 - `python-dotenv>=1.0` - Environment configuration
 - `boto3>=1.34` - AWS SDK
 - `streamlit>=1.35` - Web interface
+- `supabase>=2.4` - Backend as a Service
+- `streamlit-option-menu` - Navigation component
 
 ## 📝 API Reference
 
